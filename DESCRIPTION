@@ -1,0 +1,32 @@
+Package: itol.toolkit
+Title: Helper Functions for 'Interactive Tree Of Life'
+Version: 1.0.0
+Authors@R: 
+    person(
+    given = "Tong",
+    family = "Zhou",
+    role = c("aut", "cre"),
+    email = "tongzhou2017@gmail.com"
+  )
+Description: 
+    The 'Interactive Tree Of Life' <https://itol.embl.de/> online server can 
+    edit and annotate trees interactively. The 'itol.toolkit' package can 
+    support all types of annotation templates.
+License: MIT + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.2.2
+Imports: dplyr, stringr, stats, seqinr, utils, methods, Biostrings,
+        tidyr, ape, data.table, purrr
+Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: R (>= 2.10)
+LazyData: true
+Collate: 'data.R' 'learn.R' 'object.R' 'utils.R' 'output.R' 'user.R'
+        'ops.R'
+NeedsCompilation: no
+Packaged: 2023-01-26 11:11:54 UTC; zhoutong
+Author: Tong Zhou [aut, cre]
+Maintainer: Tong Zhou <tongzhou2017@gmail.com>
+Repository: CRAN
+Date/Publication: 2023-01-26 18:50:08 UTC
