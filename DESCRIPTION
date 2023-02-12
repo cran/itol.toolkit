@@ -1,6 +1,6 @@
 Package: itol.toolkit
 Title: Helper Functions for 'Interactive Tree Of Life'
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: 
     person(
     given = "Tong",
@@ -16,17 +16,18 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.2.2
 Imports: dplyr, stringr, stats, seqinr, utils, methods, Biostrings,
-        tidyr, ape, data.table, purrr
+        tidyr, ape, data.table, purrr, wesanderson, miniUI, shiny,
+        rstudioapi, colourpicker, ggsci, RColorBrewer
 Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Depends: R (>= 2.10)
 LazyData: true
-Collate: 'data.R' 'learn.R' 'object.R' 'utils.R' 'output.R' 'user.R'
-        'ops.R'
+Collate: 'addins.R' 'data.R' 'learn.R' 'object.R' 'utils.R' 'output.R'
+        'user.R' 'ops.R'
 NeedsCompilation: no
-Packaged: 2023-01-26 11:11:54 UTC; zhoutong
+Packaged: 2023-02-12 12:14:52 UTC; zhoutong
 Author: Tong Zhou [aut, cre]
 Maintainer: Tong Zhou <tongzhou2017@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-01-26 18:50:08 UTC
+Date/Publication: 2023-02-12 12:50:01 UTC

@@ -50,7 +50,10 @@ itol.hub <- setClass(
 #' create_hub(tree = TREE)
 #'
 create_hub <- function(tree,field_tree=NULL,seq=NULL,abundance=NULL,taxonomy=NULL,node_data=NULL,tip_data=NULL) {
-  tree <- list(main = read.tree(tree), field = list())
+  if (is.character(tree)) {
+    tree <- read.tree(tree)
+  }
+  tree <- list(main = tree, field = list())
   if (any(duplicated(tree$main$node.label)) || is.null(tree$main$node.label)) {
     tree$main <- ape::makeNodeLabel(phy = tree$main, method = "number", prefix = "I")
   }
@@ -235,7 +238,11 @@ hub_to_unit <- function(object, theme, key) {
     pattern <- "\\|"
     names_node <- names(data_node)
     names_tip <- names(data_tip)
-    eval(parse(text = paste0("data[['node']] <- tidyr::separate_rows(data_node,`", paste0(names_node[-1], collapse = "`,`"), "`,sep = pattern)")))
+    if(ncol(data_node)==1){
+      data[['node']] <- data_node
+    }else{
+      eval(parse(text = paste0("data[['node']] <- tidyr::separate_rows(data_node,`", paste0(names_node[-1], collapse = "`,`"), "`,sep = pattern)")))
+    }
     eval(parse(text = paste0("data[['tip']] <- tidyr::separate_rows(data_tip,`", paste0(names_tip[-1], collapse = "`,`"), "`,sep = pattern)")))
     data[["node"]][data[["node"]] == "NA"] <- NA
     data[["tip"]][data[["tip"]] == "NA"] <- NA
@@ -318,6 +325,65 @@ hub_to_unit <- function(object, theme, key) {
   }
   unit <- new("itol.unit", type = type, sep = sep, profile = profile, field = field, common_themes = common_themes, specific_themes = specific_themes, data = data)
   return(unit)
+}
+
+#' Merge units
+#'
+#' @description Merge two itol.unit with same type. The second unit data will be
+#' added into the first one.
+#' @param obj1 a itol.unit object specifying the first unit
+#' @param obj2 a itol.unit object specifying the second unit
+#' @return a itol.unit object with merged data
+#' @importFrom stringr str_remove
+#' @export
+merge_unit <- function(obj1,obj2){
+  if(obj1@type == obj2@type){
+    if(ncol(obj1@data$node) != ncol(obj2@data$node)){
+      t_col <- max(ncol(obj1@data$node),ncol(obj2@data$node))
+      if(t_col - ncol(obj1@data$node) > 0){
+        key_1 <- unique(stringr::str_remove(names(obj1@data$node)[-1],"\\$.*$"))
+        new_col_names <- stringr::str_remove(names(obj2@data$node)[(ncol(obj1@data$node)+1):ncol(obj2@data$node)],"^.*\\$")
+        for (i in 1:length(new_col_names)) {
+          obj1@data$node <- data.frame(obj1@data$node,new_col = NA)
+          names(obj1@data$node)[length(obj1@data$node)] <- paste0(key_1,"$",new_col_names[i])
+        }
+      }
+      if(t_col - ncol(obj2@data$node) > 0){
+        key_1 <- unique(stringr::str_remove(names(obj1@data$node)[-1],"\\$.*$"))
+        new_col_names <- stringr::str_remove(names(obj1@data$node)[(ncol(obj2@data$node)+1):ncol(obj1@data$node)],"^.*\\$")
+        for (i in 1:length(new_col_names)) {
+          obj2@data$node <- data.frame(obj2@data$node,new_col = NA)
+          names(obj2@data$node)[length(obj2@data$node)] <- paste0(key_1,"$",new_col_names[i])
+        }
+      }
+    }
+    if(ncol(obj1@data$tip) != ncol(obj2@data$tip)){
+      t_col <- max(ncol(obj1@data$tip),ncol(obj2@data$tip))
+      if(t_col - ncol(obj1@data$tip) > 0){
+        key_1 <- unique(stringr::str_remove(names(obj1@data$tip)[-1],"\\$.*$"))
+        new_col_names <- stringr::str_remove(names(obj2@data$tip)[(ncol(obj1@data$tip)+1):ncol(obj2@data$tip)],"^.*\\$")
+        for (i in 1:length(new_col_names)) {
+          obj1@data$tip <- data.frame(obj1@data$tip,new_col = NA)
+          names(obj1@data$tip)[length(obj1@data$tip)] <- paste0(key_1,"$",new_col_names[i])
+        }
+      }
+      if(t_col - ncol(obj2@data$tip) > 0){
+        key_1 <- unique(stringr::str_remove(names(obj1@data$tip)[-1],"\\$.*$"))
+        new_col_names <- stringr::str_remove(names(obj1@data$tip)[(ncol(obj2@data$tip)+1):ncol(obj1@data$tip)],"^.*\\$")
+        for (i in 1:length(new_col_names)) {
+          obj2@data$tip <- data.frame(obj2@data$tip,new_col = NA)
+          names(obj2@data$tip)[length(obj2@data$tip)] <- paste0(key_1,"$",new_col_names[i])
+        }
+      }
+    }
+    names_node <- names(obj1@data$node)
+    names_tip <- names(obj1@data$tip)
+    names(obj2@data$node) <- names_node
+    names(obj2@data$tip) <- names_tip
+    obj1@data$node <- rbind(obj1@data$node,obj2@data$node)
+    obj1@data$tip <- rbind(obj1@data$tip,obj2@data$tip)
+  }
+  return(obj1)
 }
 
 #' The itol.theme Class

@@ -66,11 +66,18 @@ correct_get_color <- function(str) {
 #' get_color
 #' @description get color, support max length 40
 #' @param n level length of a vector
+#' @param set a character specifying the palette set name. In dedault,
+#' table2itol is setted. The following choices are possible: wsanderson.
 #' @return a vector of colors
+#' @importFrom wesanderson wes_palettes
+#' @importFrom stats runif
+#' @import ggsci
+#' @import RColorBrewer
 #' @export
-get_color <- function(n) {
+get_color <- function(n=0,set="table2itol") {
   # Colour vectors collected by Jan P. Meier-Kolthoff.
   #
+
   COLOURS <- list(
     # Dark2; colour-blind-safe
     JMK01 = "#1b9e77",
@@ -324,7 +331,76 @@ get_color <- function(n) {
       "#ceb8d4", "#635b2d", "#c79783", "#733426", "#476682", "#98762e"
     )
   )
-  return(COLOURS[[n]])
+  if(set == "table2itol"){
+    return(COLOURS[[n]])
+  }
+  set_names <- c("table2itol")
+  if(set == "wesanderson"){
+    COLOURS <- list()
+    colors_vector <- unique(unlist(wesanderson::wes_palettes))
+    colors_vector <- colors_vector[which(!colors_vector%in%c("#1E1E1E",
+                                                             "#4E2A1E",
+                                                             "#0C1707",
+                                                             "#000000",
+                                                             "#1C1718",
+                                                             "#39312F",
+                                                             "#0F0D0E",
+                                                             "#29211F",
+                                                             "#24281A",
+                                                             "#273046",
+                                                             "#35274A",
+                                                             "#550307"))]
+    for (i in 1:length(colors_vector)) {
+      indexs <- sample(1:length(colors_vector),n,replace=F)
+      COLOURS[[i]] <- colors_vector[indexs]
+    }
+    return(COLOURS[[n]])
+  }
+  set_names <- c(set_names,"wesanderson")
+  set_main <- stringr::str_remove(set, "_.*$")
+  ggsci_db<-utils::getFromNamespace("ggsci_db", "ggsci")
+  if(set_main %in% names(ggsci_db)){
+    if(grepl("_",set)){
+      set_type <- unlist(strsplit(set,"_"))
+      colors <- ggsci_db[[set_type[1]]][[set_type[2]]]
+    }else{
+      colors <- ggsci_db[[set]][[1]]
+    }
+    if(n > length(colors)){
+      warning("The pattern length is shorter than n. Appending default colors to
+              make the pattern length same with n.")
+      colors <- c(colors,COLOURS[[n-length(colors)]])
+    }
+    if(n < length(colors)){
+      warning("The pattern length is longer than n. The length is cutting as
+              same as n.")
+      colors <- colors[1:n]
+    }
+    return(colors)
+  }
+  set_names <- c(set_names,names(ggsci_db))
+  if(set %in% rownames(RColorBrewer::brewer.pal.info)){
+    n_max <- RColorBrewer::brewer.pal.info[set,]$maxcolors
+    if(n > n_max){
+      warning("The pattern length is shorter than n. Appending default colors to
+              make the pattern length same with n.")
+      colors <- RColorBrewer::brewer.pal(n=n_max,name = set)
+      colors <- c(colors,COLOURS[[n-n_max]])
+    }
+    if(n < n_max){
+      warning("The pattern length is longer than n. The length is cutting as
+              same as n.")
+      colors <- RColorBrewer::brewer.pal(n=n,name = set)
+    }
+    if(n == n_max){
+      colors <- RColorBrewer::brewer.pal(n=n,name = set)
+    }
+    return(colors)
+  }
+  set_names <- c(set_names,rownames(RColorBrewer::brewer.pal.info))
+  if(set == "ls"){
+    return(set_names)
+  }
 }
 
 #' Paste rows
