@@ -1,6 +1,6 @@
 Package: itol.toolkit
 Title: Helper Functions for 'Interactive Tree Of Life'
-Version: 1.1.0
+Version: 1.1.5
 Authors@R: 
     person(
     given = "Tong",
@@ -26,8 +26,8 @@ LazyData: true
 Collate: 'addins.R' 'data.R' 'learn.R' 'object.R' 'utils.R' 'output.R'
         'user.R' 'ops.R'
 NeedsCompilation: no
-Packaged: 2023-02-12 12:14:52 UTC; zhoutong
+Packaged: 2023-04-20 18:19:20 UTC; zhoutong
 Author: Tong Zhou [aut, cre]
 Maintainer: Tong Zhou <tongzhou2017@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-02-12 12:50:01 UTC
+Date/Publication: 2023-04-20 18:52:30 UTC
