@@ -866,6 +866,10 @@ create_unit <- function(data,key,type,style="default",subtype=NULL,color=NULL,li
     data_left[["node"]] <- df_merge(data_left[["node"]], df_data)
     data_left[["tip"]] <- df_merge(data_left[["tip"]], df_data)
     profile$name <- key
+    common_themes$legend$title <- colname_data
+    common_themes$legend$colors <- levels(as.factor(color))
+    common_themes$legend$labels <- levels(as.factor(data[[colname_data]]))
+    common_themes$legend$shapes <- rep(1,length(common_themes$legend$labels))
     unit <- new("itol.unit", type = type, sep = sep, profile = profile, field = field, common_themes = common_themes, specific_themes = specific_themes, data = data_left)
   }
   if (type == "DATASET_BINARY") {
@@ -1474,11 +1478,7 @@ create_unit <- function(data,key,type,style="default",subtype=NULL,color=NULL,li
   if(type == "DATASET_ALIGNMENT"){
     if(!is.data.frame(data)){
       if(file.exists(data)){
-        fasta_file <- Biostrings::readBStringSet(data)
-        NODE_ID <- names(fasta_file)
-        SEQUENCE <- paste(fasta_file)
-        df_data <- data.frame(NODE_ID, SEQUENCE)
-        df_data$NODE_ID <- as.character(df_data$NODE_ID)
+        df_data <- fa_read(data)
         names(df_data) <- c("id",paste0(key,c("$SEQUENCE")))
       }
       stop("The input data class should be a data frame or a alignment file")

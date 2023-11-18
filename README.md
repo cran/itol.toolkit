@@ -4,6 +4,11 @@
 
 The itol.toolkit is an R package that provides helper functions for the [Interactive Tree Of Life (iTOL)](https://itol.embl.de/). This package has been selected as a third-party tool in [iTOL documentation](https://itol.embl.de/help.cgi#external) and is recommended as one of the [Top 40 New CRAN packages in January 2023](https://rviews.rstudio.com/2023/02/28/january-2023-top-40-new-cran-packages/) by the R Views channel of RStudio.
 
+First version published in [Bioinformatics](https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btad339/7177989) journal, Please cite:
+
+Tong Zhou, Kuidong Xu, Feng Zhao et. al. itol.toolkit accelerates working with iTOL (Interactive Tree Of Life) by an automated generation of annotation files, Bioinformatics, 2023;, btad339, https://doi.org/10.1093/bioinformatics/btad339
+
+
 ## Features
 
 -   Support all 114 themes among all 23 template types in iTOL v6
@@ -81,7 +86,7 @@ write_hub(hub,getwd())
 
 ## Documents
 
-We have documents for every single function and some important tips for users:
+We have documents for every single function and some important tips for users. We also provided a ChatBot to help users learn the package interactively on [Chat Thing](https://chatthing.ai/bots/4de00ca8-a0f6-4e2d-8bd7-da65f10dc688/).
 
 ### Single functions
 
@@ -147,9 +152,13 @@ We have documents for every single function and some important tips for users:
 
 - [Tree construction](https://tongzhou2017.github.io/itol.toolkit/articles/tree_construction.html): create a tree by different data and methods.
 
+### Video
+
+[![Watch the video](https://img.youtube.com/vi/aacPCzLi404/maxresdefault.jpg)](https://youtu.be/aacPCzLi404)
+
 ## Gallery
 
-We collected reproducible plots into a [gallery](https://tongzhou2017.github.io/itol.toolkit/articles/Image_Gallery.html) page.
+We collected reproducible plots into a [gallery](https://tongzhou2017.github.io/itol.toolkit-gallery/) page.
 
 ## Support
 
